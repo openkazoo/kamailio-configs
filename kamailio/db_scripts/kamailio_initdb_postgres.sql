@@ -1640,11 +1640,12 @@ CREATE VIEW public.presentities AS
     to_timestamp((presentity.expires)::double precision) AS expire_date,
     presentity.expires,
     (presentity.sender)::character varying(30) AS sender,
+            WHEN ((presentity.event)::text = 'dialog'::text) THEN "substring"(encode(presentity.body, 'escape'::text), ("position"(presentity.body, '\x3c73746174653e'::bytea) + 7), (("position"(presentity.body, '\x3c2f73746174653e'::bytea) - "position"(presentity.body, '\x3c73746174653e'::bytea)) - 7))
     lower(((
         CASE
-            WHEN ((presentity.event)::text = 'dialog'::text) THEN "substring"(encode(presentity.body, 'escape'::text), ("position"(presentity.body, '\x3c73746174653e'::bytea) + 7), (("position"(presentity.body, '\x3c2f73746174653e'::bytea) - "position"(presentity.body, '\x3c73746174653e'::bytea)) - 7))
             WHEN ((presentity.event)::text = 'presence'::text) THEN
             CASE
+);
                 WHEN ("position"(encode(presentity.body, 'escape'::text), '<dm:note>'::text) = 0) THEN replace("substring"(encode(presentity.body, 'escape'::text), ("position"(encode(presentity.body, 'escape'::text), '<note>'::text) + 6), (("position"(encode(presentity.body, 'escape'::text), '</note>'::text) - "position"(encode(presentity.body, 'escape'::text), '<note>'::text)) - 6)), ' '::text, ''::text)
                 ELSE replace("substring"(encode(presentity.body, 'escape'::text), ("position"(encode(presentity.body, 'escape'::text), '<dm:note>'::text) + 9), (("position"(encode(presentity.body, 'escape'::text), '</dm:note>'::text) - "position"(encode(presentity.body, 'escape'::text), '<dm:note>'::text)) - 9)), ' '::text, ''::text)
             END
@@ -2361,7 +2362,7 @@ CREATE TABLE public.uacreg (
     expires integer DEFAULT 0 NOT NULL,
     flags integer DEFAULT 0 NOT NULL,
     reg_delay integer DEFAULT 0 NOT NULL
-);
+
 
 
 ALTER TABLE public.uacreg OWNER TO kamailio;
@@ -2674,7 +2675,7 @@ CREATE SEQUENCE public.uri_id_seq
     NO MAXVALUE
     CACHE 1;
 
-
+--
 ALTER TABLE public.uri_id_seq OWNER TO kamailio;
 
 --
@@ -3291,7 +3292,7 @@ ALTER TABLE ONLY public.uid_uri ALTER COLUMN id SET DEFAULT nextval('public.uid_
 ALTER TABLE ONLY public.uid_uri_attrs ALTER COLUMN id SET DEFAULT nextval('public.uid_uri_attrs_id_seq'::regclass);
 
 
---
+-- Data for Name: imc_rooms; Type: TABLE DATA; Schema: public; Owner: kamailio
 -- Name: uid_user_attrs id; Type: DEFAULT; Schema: public; Owner: kamailio
 --
 
@@ -3561,7 +3562,7 @@ COPY public.imc_members (id, username, domain, room, flag) FROM stdin;
 
 
 --
--- Data for Name: imc_rooms; Type: TABLE DATA; Schema: public; Owner: kamailio
+--
 --
 
 COPY public.imc_rooms (id, name, domain, flag) FROM stdin;
@@ -3752,7 +3753,7 @@ COPY public.sip_trace (id, time_stamp, time_us, callid, traced_user, msg, method
 \.
 
 
---
+-- Name: address_id_seq; Type: SEQUENCE SET; Schema: public; Owner: kamailio
 -- Data for Name: speed_dial; Type: TABLE DATA; Schema: public; Owner: kamailio
 --
 
@@ -3893,77 +3894,77 @@ COPY public.usr_preferences (id, uuid, username, domain, attribute, type, value,
 --
 
 COPY public.version (table_name, table_version) FROM stdin;
-version	1
-acc	5
-acc_cdrs	2
-missed_calls	4
-dbaliases	1
-subscriber	7
-usr_preferences	2
-carrierroute	3
-carrierfailureroute	2
-carrier_name	1
-domain_name	1
-cpl	1
-dialog	7
-dialog_vars	1
-dialplan	2
-dispatcher	4
-domain	2
-domain_attrs	1
-domainpolicy	2
-dr_gateways	3
-dr_rules	3
-dr_gw_lists	1
-dr_groups	2
-grp	2
-re_grp	1
-htable	2
-imc_rooms	1
-imc_members	1
-lcr_gw	3
-lcr_rule_target	1
-lcr_rule	3
-matrix	1
-mohqcalls	1
-mohqueues	1
-silo	8
-mtree	1
-mtrees	2
-pdt	1
-trusted	6
-address	6
-pl_pipes	1
-presentity	5
-active_watchers	12
-watchers	3
-xcap	4
-pua	7
-purplemap	1
-aliases	8
-rls_presentity	1
-rls_watchers	3
-rtpengine	1
-rtpproxy	1
-sca_subscriptions	2
-sip_trace	4
-speed_dial	2
-topos_d	1
-topos_t	1
-uacreg	3
-uid_credentials	7
-uid_user_attrs	3
-uid_domain	2
-uid_domain_attrs	1
-uid_global_attrs	1
-uid_uri	3
-uid_uri_attrs	2
-uri	1
-userblacklist	1
-globalblacklist	1
-location	9
-location_attrs	1
-event_list	1
+version 1
+acc     5
+acc_cdrs        2
+missed_calls    4
+dbaliases       1
+subscriber      7
+usr_preferences 2
+carrierroute    3
+carrierfailureroute     2
+carrier_name    1
+domain_name     1
+cpl     1
+dialog  7
+dialog_vars     1
+dialplan        2
+dispatcher      4
+domain  2
+domain_attrs    1
+domainpolicy    2
+dr_gateways     3
+dr_rules        3
+dr_gw_lists     1
+dr_groups       2
+grp     2
+re_grp  1
+htable  2
+imc_rooms       1
+imc_members     1
+lcr_gw  3
+lcr_rule_target 1
+lcr_rule        3
+matrix  1
+mohqcalls       1
+mohqueues       1
+silo    8
+mtree   1
+mtrees  2
+pdt     1
+trusted 6
+address 6
+pl_pipes        1
+presentity      5
+active_watchers 12
+watchers        3
+xcap    4
+pua     7
+purplemap       1
+aliases 8
+rls_presentity  1
+rls_watchers    3
+rtpengine       1
+rtpproxy        1
+sca_subscriptions       2
+sip_trace       4
+speed_dial      2
+topos_d 1
+topos_t 1
+uacreg  3
+uid_credentials 7
+uid_user_attrs  3
+uid_domain      2
+uid_domain_attrs        1
+uid_global_attrs        1
+uid_uri 3
+uid_uri_attrs   2
+uri     1
+userblacklist   1
+globalblacklist 1
+location        9
+location_attrs  1
+event_list      1
 \.
 
 
@@ -4012,7 +4013,6 @@ SELECT pg_catalog.setval('public.active_watchers_log_id_seq', 672642, true);
 
 
 --
--- Name: address_id_seq; Type: SEQUENCE SET; Schema: public; Owner: kamailio
 --
 
 SELECT pg_catalog.setval('public.address_id_seq', 1, false);
@@ -5808,4 +5808,3 @@ CREATE INDEX xcap_account_doc_uri_idx ON public.xcap USING btree (username, doma
 --
 -- PostgreSQL database dump complete
 --
-
