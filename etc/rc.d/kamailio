@@ -1,0 +1,250 @@
+#!/bin/sh
+
+# PROVIDE: kamailio
+# REQUIRE: NETWORKING SERVERS DAEMON
+# KEYWORD: shutdown
+#
+# Add the following line to /etc/rc.conf to enable this service
+# at system startup:
+#
+# kamailio_enable (bool):
+#     Set to NO by default
+#     Set it to YES to enable kamailio
+# kamailio_user (string)
+#     Set user to run kamailio
+#     Default is "kamailio"
+# kamailio_group (string)
+#     Set group to run kamailio
+#     Default is "kamailio"
+# kamailio_pidfile (string)
+#     Set full path to pid file
+#     Default is "/var/run/kamailio/kamailio.pid"
+#
+
+. /etc/rc.subr
+
+name=kamailio
+rcvar=kamailio_enable
+
+load_rc_config ${name}
+
+: ${kamailio_enable:="NO"}
+: ${kamailio_user:="kamailio"}
+: ${kamailio_group:="kamailio"}
+: ${kamailio_pidfile:="/var/run/kamailio/kamailio.pid"}
+: ${kamailio_sqlite:="YES"}
+
+pidfile="${kamailio_pidfile}"
+required_files="/usr/local/etc/kamailio/kamailio.cfg"
+command="/usr/local/sbin/kamailio"
+command_args="-P ${pidfile}"
+
+sqlite_command="/usr/local/bin/sqlite3"
+kazoo_data_dir="/var/db/kamailio/kazoo"
+kazoo_backup_dir="/var/db/kamailio/kazoo-backups"
+kazoo_dbfile="${kazoo_data_dir}/kazoo.db"
+
+start_precmd="kamailio_start_precmd"
+restart_precmd="kamailio_checkconfig"
+reload_precmd="kamailio_checkconfig"
+configtest_cmd="kamailio_checkconfig"
+checksqlite_cmd="kazoo_checksqlite"
+extra_commands="configtest checksqlite"
+
+sqlite_enabled()
+{
+	[ "$kamailio_sqlite" = "YES" ]
+}
+
+kamailio_start_precmd()
+{
+	if [ ! -d "/var/run/kamailio" ]; then
+		install -d -m 0750 -o ${kamailio_user} -g ${kamailio_group} "/var/run/kamailio"
+	fi
+
+	if (sqlite_enabled); then
+		kazoo_checksqlite
+	fi
+
+	kamailio_checkconfig
+}
+
+kamailio_checkconfig()
+{
+	echo "Performing sanity check on ${name} configuration:"
+	eval ${command} ${kamailio_flags} -c >/dev/null
+}
+
+kazoo_checksqlite()
+{
+	if ! (sqlite_enabled); then
+		echo "[Kazoo] SQLite is not enabled"
+		exit 1
+	fi
+
+	# Ensure required directories exist
+	kazoo_checkdirs
+
+	# Ensure tempfs is mounted
+	kazoo_checktmpfs
+
+	# Ensure SQLite database is valid
+	kazoo_validatedb
+
+	# Ensure SQLite database is in WAL mode
+	kazoo_checkdbwal
+
+	# Ensure permissions are set correctly
+	kazoo_setpermissions
+}
+
+kazoo_checkdirs()
+{
+	# Check if the data directory exists
+	if [ ! -d "${kazoo_data_dir}" ]; then
+		if ! (mkdir -p "${kazoo_data_dir}"); then
+			echo "[Kazoo] Failed to create data directory '${kazoo_data_dir}'"
+			exit 1
+		fi
+
+		exit 1
+	fi
+
+	# Check if the backup directory exists
+	if [ ! -d "${kazoo_backup_dir}" ]; then
+		if ! (mkdir -p "${kazoo_backup_dir}"); then
+			echo "[Kazoo] Failed to create backup directory '${kazoo_backup_dir}'"
+			exit 1
+		fi
+	fi
+
+	echo "[Kazoo] Directory check OK"
+}
+
+kazoo_checktmpfs()
+{
+	# Check if tmpfs is mounted
+	if ! (mount | grep -q "tmpfs on ${kazoo_data_dir}"); then
+		# Attempt to mount tmpfs
+		if ! (mount -t tmpfs tmpfs "${kazoo_data_dir}"); then
+			echo "[Kazoo] Failed to mount tmpfs"
+			exit 1
+		fi
+	fi
+
+	set -- $(df -h "${kazoo_data_dir}" | grep "${kazoo_data_dir}")
+	echo "[Kazoo] tmpfs check OK (${3} of ${4} used (${5}))"
+}
+
+kazoo_checkdb()
+{
+	# Check if database is valid
+	if (kazoo_checkdbfile "${kazoo_dbfile}"); then
+		echo "[Kazoo] Database check OK"
+		return 0
+	fi
+
+	echo "[Kazoo] Attempting to restore from backup"
+
+	kazoo_restoredb
+}
+
+kazoo_checkdbfile()
+{
+	file="$1"
+
+	# Check if database file exists
+	if [ ! -f "${file}" ]; then
+		echo "[Kazoo] Database '${file}' not found"
+		return 1
+	fi
+
+	# Perform a consistency check on the database
+	if ! ("${sqlite_command}" "${file}" "PRAGMA integrity_check" 2>/dev/null | grep -q "^ok$"); then
+		echo "[Kazoo] Database '${file}' is corrupt"
+		return 1
+	fi
+}
+
+kazoo_restoredb()
+{
+	# Find eligible backup files
+	for file in $(find "${kazoo_backup_dir}" -maxdepth 1 -type f -name 'backup-*.db' | sort -r); do
+		# Check if backup is valid
+		if (kazoo_checkdbfile "${file}"); then
+			# Restore the backup file
+			if (cp "${file}" "${kazoo_dbfile}"); then
+				echo "[Kazoo] Restored database from '${file}'"
+				return 0
+			else
+				echo "[Kazoo] Failed to restore backup from '${file}'"
+			fi
+		fi
+	done
+
+	echo "[Kazoo] Failed to find valid backup"
+
+	kazoo_initdb
+}
+
+kazoo_initdb()
+{
+	echo "[Kazoo] Initializing database"
+
+	file="/var/db/kamailio/init/sqlite.sql"
+
+	if ! [ -f "${file}" ]; then
+		echo "[Kazoo] Database schema '${file}' not found"
+		exit 1
+	fi
+
+	# Initialize the database from the schema file
+	if ! ("${sqlite_command}" "${kazoo_dbfile}" < "${file}"); then
+		echo "[Kazoo] Failed to initialize database"
+		exit 1
+	fi
+
+	# Check if the new database is valid
+	if ! (kazoo_checkdbfile "${kazoo_dbfile}"); then
+		exit 1
+	fi
+}
+
+kazoo_checkdbwal()
+{
+	if  ! (kazoo_checkdbfile "${kazoo_dbfile}"); then
+		exit 1
+	fi
+
+	# Check if WAL mode is enabled on the database
+	if ! ("${sqlite_command}" "${kazoo_dbfile}" "PRAGMA journal_mode" 2>/dev/null | grep -q "^wal$"); then
+		echo "[Kazoo] Enabling WAL mode on database"
+
+		# Enable WAL mode on the database
+		if ! ("${sqlite_command}" "${kazoo_dbfile}" "PRAGMA journal_mode=WAL" 2>/dev/null | grep -q "^wal$"); then
+			echo "[Kazoo] Failed to enable WAL mode on database"
+			exit 1
+		fi
+	fi
+
+	echo "[Kazoo] WAL check OK"
+}
+
+kazoo_setpermissions()
+{
+	# Set permissions on the data directory
+	if ! (chown -R "${kamailio_user}":"${kamailio_group}" "${kazoo_data_dir}" && chmod 755 "${kazoo_data_dir}"); then
+		echo "[Kazoo] Failed to set permissions on '${kazoo_data_dir}'"
+		exit 1
+	fi
+
+	# Set permissions on the backup directory
+	if ! (chown -R "${kamailio_user}":"${kamailio_group}" "${kazoo_backup_dir}" && chmod 755 "${kazoo_backup_dir}"); then
+		echo "[Kazoo] Failed to set permissions on '${kazoo_backup_dir}'"
+		exit 1
+	fi
+
+	echo "[Kazoo] Permissions set OK"
+}
+
+run_rc_command $1
