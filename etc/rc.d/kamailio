@@ -89,7 +89,7 @@ kazoo_checksqlite()
 	kazoo_checktmpfs
 
 	# Ensure SQLite database is valid
-	kazoo_validatedb
+	kazoo_checkdb
 
 	# Ensure SQLite database is in WAL mode
 	kazoo_checkdbwal
