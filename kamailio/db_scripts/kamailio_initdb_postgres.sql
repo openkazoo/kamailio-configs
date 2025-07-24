@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 12.7
--- Dumped by pg_dump version 12.7
+-- Dumped from database version 15.10 (Debian 15.10-0+deb12u1)
+-- Dumped by pg_dump version 15.10 (Debian 15.10-0+deb12u1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -86,13 +86,6 @@ CREATE SEQUENCE public.acc_id_seq
 
 
 ALTER TABLE public.acc_id_seq OWNER TO kamailio;
-
---
--- Name: acc_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
---
-
-ALTER SEQUENCE public.acc_id_seq OWNED BY public.acc.id;
-
 
 --
 -- Name: active_watchers; Type: TABLE; Schema: public; Owner: kamailio
@@ -1022,10 +1015,10 @@ ALTER SEQUENCE public.grp_id_seq OWNED BY public.grp.id;
 
 CREATE TABLE public.htable (
     id integer NOT NULL,
-    key_name character varying(64) DEFAULT ''::character varying NOT NULL,
+    key_name character varying(256) DEFAULT ''::character varying NOT NULL,
     key_type integer DEFAULT 0 NOT NULL,
     value_type integer DEFAULT 0 NOT NULL,
-    key_value character varying(128) DEFAULT ''::character varying NOT NULL,
+    key_value character varying(512) DEFAULT ''::character varying NOT NULL,
     expires integer DEFAULT 0 NOT NULL
 );
 
@@ -1640,12 +1633,11 @@ CREATE VIEW public.presentities AS
     to_timestamp((presentity.expires)::double precision) AS expire_date,
     presentity.expires,
     (presentity.sender)::character varying(30) AS sender,
-            WHEN ((presentity.event)::text = 'dialog'::text) THEN "substring"(encode(presentity.body, 'escape'::text), ("position"(presentity.body, '\x3c73746174653e'::bytea) + 7), (("position"(presentity.body, '\x3c2f73746174653e'::bytea) - "position"(presentity.body, '\x3c73746174653e'::bytea)) - 7))
     lower(((
         CASE
+            WHEN ((presentity.event)::text = 'dialog'::text) THEN "substring"(encode(presentity.body, 'escape'::text), ("position"(presentity.body, '\x3c73746174653e'::bytea) + 7), (("position"(presentity.body, '\x3c2f73746174653e'::bytea) - "position"(presentity.body, '\x3c73746174653e'::bytea)) - 7))
             WHEN ((presentity.event)::text = 'presence'::text) THEN
             CASE
-);
                 WHEN ("position"(encode(presentity.body, 'escape'::text), '<dm:note>'::text) = 0) THEN replace("substring"(encode(presentity.body, 'escape'::text), ("position"(encode(presentity.body, 'escape'::text), '<note>'::text) + 6), (("position"(encode(presentity.body, 'escape'::text), '</note>'::text) - "position"(encode(presentity.body, 'escape'::text), '<note>'::text)) - 6)), ' '::text, ''::text)
                 ELSE replace("substring"(encode(presentity.body, 'escape'::text), ("position"(encode(presentity.body, 'escape'::text), '<dm:note>'::text) + 9), (("position"(encode(presentity.body, 'escape'::text), '</dm:note>'::text) - "position"(encode(presentity.body, 'escape'::text), '<dm:note>'::text)) - 9)), ' '::text, ''::text)
             END
@@ -2362,7 +2354,7 @@ CREATE TABLE public.uacreg (
     expires integer DEFAULT 0 NOT NULL,
     flags integer DEFAULT 0 NOT NULL,
     reg_delay integer DEFAULT 0 NOT NULL
-
+);
 
 
 ALTER TABLE public.uacreg OWNER TO kamailio;
@@ -2675,7 +2667,7 @@ CREATE SEQUENCE public.uri_id_seq
     NO MAXVALUE
     CACHE 1;
 
---
+
 ALTER TABLE public.uri_id_seq OWNER TO kamailio;
 
 --
@@ -2849,13 +2841,6 @@ ALTER TABLE public.xcap_id_seq OWNER TO kamailio;
 --
 
 ALTER SEQUENCE public.xcap_id_seq OWNED BY public.xcap.id;
-
-
---
--- Name: acc id; Type: DEFAULT; Schema: public; Owner: kamailio
---
-
-ALTER TABLE ONLY public.acc ALTER COLUMN id SET DEFAULT nextval('public.acc_id_seq'::regclass);
 
 
 --
@@ -3292,7 +3277,7 @@ ALTER TABLE ONLY public.uid_uri ALTER COLUMN id SET DEFAULT nextval('public.uid_
 ALTER TABLE ONLY public.uid_uri_attrs ALTER COLUMN id SET DEFAULT nextval('public.uid_uri_attrs_id_seq'::regclass);
 
 
--- Data for Name: imc_rooms; Type: TABLE DATA; Schema: public; Owner: kamailio
+--
 -- Name: uid_user_attrs id; Type: DEFAULT; Schema: public; Owner: kamailio
 --
 
@@ -3451,6 +3436,8 @@ COPY public.dialplan (id, dpid, pr, match_op, match_exp, match_len, subst_exp, r
 --
 
 COPY public.dispatcher (id, setid, destination, flags, priority, attrs, description) FROM stdin;
+7	1	sip:20.108.67.20:11000	0	0		
+8	2	sip:10.0.0.4:11000	0	0		
 \.
 
 
@@ -3562,7 +3549,7 @@ COPY public.imc_members (id, username, domain, room, flag) FROM stdin;
 
 
 --
---
+-- Data for Name: imc_rooms; Type: TABLE DATA; Schema: public; Owner: kamailio
 --
 
 COPY public.imc_rooms (id, name, domain, flag) FROM stdin;
@@ -3598,6 +3585,14 @@ COPY public.lcr_rule_target (id, lcr_id, rule_id, gw_id, priority, weight) FROM 
 --
 
 COPY public.location (id, ruid, username, domain, contact, received, path, expires, q, callid, cseq, last_modified, flags, cflags, user_agent, socket, methods, instance, reg_id, server_id, connection_id, keepalive, partition) FROM stdin;
+\.
+
+
+--
+-- Data for Name: location_attrs; Type: TABLE DATA; Schema: public; Owner: kamailio
+--
+
+COPY public.location_attrs (id, ruid, username, domain, aname, atype, avalue, last_modified) FROM stdin;
 \.
 
 
@@ -3753,7 +3748,7 @@ COPY public.sip_trace (id, time_stamp, time_us, callid, traced_user, msg, method
 \.
 
 
--- Name: address_id_seq; Type: SEQUENCE SET; Schema: public; Owner: kamailio
+--
 -- Data for Name: speed_dial; Type: TABLE DATA; Schema: public; Owner: kamailio
 --
 
@@ -3894,77 +3889,77 @@ COPY public.usr_preferences (id, uuid, username, domain, attribute, type, value,
 --
 
 COPY public.version (table_name, table_version) FROM stdin;
-version 1
-acc     5
-acc_cdrs        2
-missed_calls    4
-dbaliases       1
-subscriber      7
-usr_preferences 2
-carrierroute    3
-carrierfailureroute     2
-carrier_name    1
-domain_name     1
-cpl     1
-dialog  7
-dialog_vars     1
-dialplan        2
-dispatcher      4
-domain  2
-domain_attrs    1
-domainpolicy    2
-dr_gateways     3
-dr_rules        3
-dr_gw_lists     1
-dr_groups       2
-grp     2
-re_grp  1
-htable  2
-imc_rooms       1
-imc_members     1
-lcr_gw  3
-lcr_rule_target 1
-lcr_rule        3
-matrix  1
-mohqcalls       1
-mohqueues       1
-silo    8
-mtree   1
-mtrees  2
-pdt     1
-trusted 6
-address 6
-pl_pipes        1
-presentity      5
-active_watchers 12
-watchers        3
-xcap    4
-pua     7
-purplemap       1
-aliases 8
-rls_presentity  1
-rls_watchers    3
-rtpengine       1
-rtpproxy        1
-sca_subscriptions       2
-sip_trace       4
-speed_dial      2
-topos_d 1
-topos_t 1
-uacreg  3
-uid_credentials 7
-uid_user_attrs  3
-uid_domain      2
-uid_domain_attrs        1
-uid_global_attrs        1
-uid_uri 3
-uid_uri_attrs   2
-uri     1
-userblacklist   1
-globalblacklist 1
-location        9
-location_attrs  1
-event_list      1
+version	1
+acc	5
+acc_cdrs	2
+missed_calls	4
+dbaliases	1
+subscriber	7
+usr_preferences	2
+carrierroute	3
+carrierfailureroute	2
+carrier_name	1
+domain_name	1
+cpl	1
+dialog	7
+dialog_vars	1
+dialplan	2
+dispatcher	4
+domain	2
+domain_attrs	1
+domainpolicy	2
+dr_gateways	3
+dr_rules	3
+dr_gw_lists	1
+dr_groups	2
+grp	2
+re_grp	1
+htable	2
+imc_rooms	1
+imc_members	1
+lcr_gw	3
+lcr_rule_target	1
+lcr_rule	3
+matrix	1
+mohqcalls	1
+mohqueues	1
+silo	8
+mtree	1
+mtrees	2
+pdt	1
+trusted	6
+address	6
+pl_pipes	1
+presentity	5
+active_watchers	12
+watchers	3
+xcap	4
+pua	7
+purplemap	1
+aliases	8
+rls_presentity	1
+rls_watchers	3
+rtpengine	1
+rtpproxy	1
+sca_subscriptions	2
+sip_trace	4
+speed_dial	2
+topos_d	1
+topos_t	1
+uacreg	3
+uid_credentials	7
+uid_user_attrs	3
+uid_domain	2
+uid_domain_attrs	1
+uid_global_attrs	1
+uid_uri	3
+uid_uri_attrs	2
+uri	1
+userblacklist	1
+globalblacklist	1
+location	9
+location_attrs	1
+event_list	1
 \.
 
 
@@ -4002,17 +3997,18 @@ SELECT pg_catalog.setval('public.acc_id_seq', 1, false);
 -- Name: active_watchers_id_seq; Type: SEQUENCE SET; Schema: public; Owner: kamailio
 --
 
-SELECT pg_catalog.setval('public.active_watchers_id_seq', 2526, true);
+SELECT pg_catalog.setval('public.active_watchers_id_seq', 2589, true);
 
 
 --
 -- Name: active_watchers_log_id_seq; Type: SEQUENCE SET; Schema: public; Owner: kamailio
 --
 
-SELECT pg_catalog.setval('public.active_watchers_log_id_seq', 672642, true);
+SELECT pg_catalog.setval('public.active_watchers_log_id_seq', 672837, true);
 
 
 --
+-- Name: address_id_seq; Type: SEQUENCE SET; Schema: public; Owner: kamailio
 --
 
 SELECT pg_catalog.setval('public.address_id_seq', 1, false);
@@ -4085,7 +4081,7 @@ SELECT pg_catalog.setval('public.dialplan_id_seq', 1, false);
 -- Name: dispatcher_id_seq; Type: SEQUENCE SET; Schema: public; Owner: kamailio
 --
 
-SELECT pg_catalog.setval('public.dispatcher_id_seq', 6, true);
+SELECT pg_catalog.setval('public.dispatcher_id_seq', 8, true);
 
 
 --
@@ -4204,14 +4200,14 @@ SELECT pg_catalog.setval('public.lcr_rule_target_id_seq', 1, false);
 -- Name: location_attrs_id_seq; Type: SEQUENCE SET; Schema: public; Owner: kamailio
 --
 
-SELECT pg_catalog.setval('public.location_attrs_id_seq', 299672, true);
+SELECT pg_catalog.setval('public.location_attrs_id_seq', 299720, true);
 
 
 --
 -- Name: location_id_seq; Type: SEQUENCE SET; Schema: public; Owner: kamailio
 --
 
-SELECT pg_catalog.setval('public.location_id_seq', 332, true);
+SELECT pg_catalog.setval('public.location_id_seq', 348, true);
 
 
 --
@@ -4267,7 +4263,7 @@ SELECT pg_catalog.setval('public.pl_pipes_id_seq', 1, false);
 -- Name: presentity_id_seq; Type: SEQUENCE SET; Schema: public; Owner: kamailio
 --
 
-SELECT pg_catalog.setval('public.presentity_id_seq', 3284, true);
+SELECT pg_catalog.setval('public.presentity_id_seq', 3294, true);
 
 
 --
@@ -4472,14 +4468,6 @@ SELECT pg_catalog.setval('public.xcap_id_seq', 1, false);
 
 ALTER TABLE ONLY public.acc_cdrs
     ADD CONSTRAINT acc_cdrs_pkey PRIMARY KEY (id);
-
-
---
--- Name: acc acc_pkey; Type: CONSTRAINT; Schema: public; Owner: kamailio
---
-
-ALTER TABLE ONLY public.acc
-    ADD CONSTRAINT acc_pkey PRIMARY KEY (id);
 
 
 --
@@ -5323,13 +5311,6 @@ ALTER TABLE ONLY public.xcap
 
 
 --
--- Name: acc_callid_idx; Type: INDEX; Schema: public; Owner: kamailio
---
-
-CREATE INDEX acc_callid_idx ON public.acc USING btree (callid);
-
-
---
 -- Name: acc_cdrs_start_time_idx; Type: INDEX; Schema: public; Owner: kamailio
 --
 
@@ -5806,5 +5787,13 @@ CREATE INDEX xcap_account_doc_uri_idx ON public.xcap USING btree (username, doma
 
 
 --
+-- Name: SCHEMA public; Type: ACL; Schema: -; Owner: pg_database_owner
+--
+
+GRANT ALL ON SCHEMA public TO kamailio;
+
+
+--
 -- PostgreSQL database dump complete
 --
+
