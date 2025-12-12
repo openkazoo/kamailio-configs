@@ -1,0 +1,94 @@
+#!/bin/sh
+
+# PROVIDE: kamailio
+# REQUIRE: NETWORKING SERVERS DAEMON
+# KEYWORD: shutdown
+#
+# Add the following line to /etc/rc.conf to enable this service
+# at system startup:
+#
+# kamailio_enable (bool):
+#     Set to NO by default
+#     Set it to YES to enable kamailio
+# kamailio_user (string)
+#     Set user to run kamailio
+#     Default is "kamailio"
+# kamailio_group (string)
+#     Set group to run kamailio
+#     Default is "kamailio"
+# kamailio_pidfile (string)
+#     Set full path to pid file
+#     Default is "/var/run/kamailio/kamailio.pid"
+#
+
+. /etc/rc.subr
+
+name=kamailio
+rcvar=kamailio_enable
+
+load_rc_config ${name}
+
+: ${kamailio_enable:="NO"}
+: ${kamailio_user:="kamailio"}
+: ${kamailio_group:="kamailio"}
+: ${kamailio_pidfile:="/var/run/kamailio/kamailio.pid"}
+
+pidfile="${kamailio_pidfile}"
+required_files="/usr/local/etc/kamailio/kamailio.cfg"
+command="/usr/local/sbin/kamailio"
+command_args="-P ${pidfile}"
+
+data_dir="/var/db/kamailio"
+
+start_precmd="kamailio_start_precmd"
+restart_precmd="kamailio_checkconfig"
+reload_precmd="kamailio_checkconfig"
+configtest_cmd="kamailio_checkconfig"
+checkdirs_cmd="kamailio_checkdirs"
+extra_commands="configtest checkdirs"
+
+kamailio_start_precmd()
+{
+	if [ ! -d "/var/run/kamailio" ]; then
+		install -d -m 0750 -o ${kamailio_user} -g ${kamailio_group} "/var/run/kamailio"
+	fi
+
+	kamailio_checkdirs
+	kamailio_checkconfig
+}
+
+kamailio_checkconfig()
+{
+	echo "Performing sanity check on ${name} configuration:"
+	eval ${command} ${kamailio_flags} -c >/dev/null
+}
+
+kamailio_checkdirs()
+{
+	# Check if the data directory exists
+	if [ ! -d "${data_dir}" ]; then
+		if ! (mkdir -p "${data_dir}"); then
+			echo "Failed to create data directory '${data_dir}'"
+			exit 1
+		fi
+
+		exit 1
+	fi
+
+	kamailio_setpermissions
+
+	echo "Directory check OK"
+}
+
+kamailio_setpermissions()
+{
+	# Set permissions on the data directory
+	if ! (chown -R "${kamailio_user}":"${kamailio_group}" "${data_dir}" && chmod 755 "${data_dir}"); then
+		echo "Failed to set permissions on '${data_dir}'"
+		exit 1
+	fi
+
+	echo "Directory permissions set OK"
+}
+
+run_rc_command $1
