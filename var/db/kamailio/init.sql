@@ -2,12 +2,13 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 12.7
--- Dumped by pg_dump version 12.7
+-- Dumped from database version 18.2
+-- Dumped by pg_dump version 18.2
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
+SET transaction_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
@@ -15,6 +16,15 @@ SET check_function_bodies = false;
 SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
+
+--
+-- Name: public; Type: SCHEMA; Schema: -; Owner: kamailio
+--
+
+-- *not* creating schema, since initdb creates it
+
+
+ALTER SCHEMA public OWNER TO kamailio;
 
 SET default_tablespace = '';
 
@@ -64,7 +74,7 @@ CREATE SEQUENCE public.acc_cdrs_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.acc_cdrs_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.acc_cdrs_id_seq OWNER TO kamailio;
 
 --
 -- Name: acc_cdrs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -85,14 +95,7 @@ CREATE SEQUENCE public.acc_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.acc_id_seq OWNER TO kamailio;
-
---
--- Name: acc_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
---
-
-ALTER SEQUENCE public.acc_id_seq OWNED BY public.acc.id;
-
+ALTER SEQUENCE public.acc_id_seq OWNER TO kamailio;
 
 --
 -- Name: active_watchers; Type: TABLE; Schema: public; Owner: kamailio
@@ -143,7 +146,7 @@ CREATE SEQUENCE public.active_watchers_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.active_watchers_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.active_watchers_id_seq OWNER TO kamailio;
 
 --
 -- Name: active_watchers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -187,7 +190,7 @@ CREATE SEQUENCE public.active_watchers_log_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.active_watchers_log_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.active_watchers_log_id_seq OWNER TO kamailio;
 
 --
 -- Name: active_watchers_log_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -224,7 +227,7 @@ CREATE SEQUENCE public.address_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.address_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.address_id_seq OWNER TO kamailio;
 
 --
 -- Name: address_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -278,7 +281,7 @@ CREATE SEQUENCE public.aliases_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.aliases_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.aliases_id_seq OWNER TO kamailio;
 
 --
 -- Name: aliases_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -311,7 +314,7 @@ CREATE SEQUENCE public.carrier_name_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.carrier_name_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.carrier_name_id_seq OWNER TO kamailio;
 
 --
 -- Name: carrier_name_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -352,7 +355,7 @@ CREATE SEQUENCE public.carrierfailureroute_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.carrierfailureroute_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.carrierfailureroute_id_seq OWNER TO kamailio;
 
 --
 -- Name: carrierfailureroute_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -395,7 +398,7 @@ CREATE SEQUENCE public.carrierroute_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.carrierroute_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.carrierroute_id_seq OWNER TO kamailio;
 
 --
 -- Name: carrierroute_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -431,7 +434,7 @@ CREATE SEQUENCE public.cpl_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.cpl_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.cpl_id_seq OWNER TO kamailio;
 
 --
 -- Name: cpl_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -467,7 +470,7 @@ CREATE SEQUENCE public.dbaliases_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.dbaliases_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.dbaliases_id_seq OWNER TO kamailio;
 
 --
 -- Name: dbaliases_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -522,7 +525,7 @@ CREATE SEQUENCE public.dialog_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.dialog_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.dialog_id_seq OWNER TO kamailio;
 
 --
 -- Name: dialog_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -558,7 +561,7 @@ CREATE SEQUENCE public.dialog_vars_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.dialog_vars_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.dialog_vars_id_seq OWNER TO kamailio;
 
 --
 -- Name: dialog_vars_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -598,7 +601,7 @@ CREATE SEQUENCE public.dialplan_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.dialplan_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.dialplan_id_seq OWNER TO kamailio;
 
 --
 -- Name: dialplan_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -636,7 +639,7 @@ CREATE SEQUENCE public.dispatcher_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.dispatcher_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.dispatcher_id_seq OWNER TO kamailio;
 
 --
 -- Name: dispatcher_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -687,7 +690,7 @@ CREATE SEQUENCE public.domain_attrs_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.domain_attrs_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.domain_attrs_id_seq OWNER TO kamailio;
 
 --
 -- Name: domain_attrs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -708,7 +711,7 @@ CREATE SEQUENCE public.domain_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.domain_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.domain_id_seq OWNER TO kamailio;
 
 --
 -- Name: domain_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -741,7 +744,7 @@ CREATE SEQUENCE public.domain_name_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.domain_name_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.domain_name_id_seq OWNER TO kamailio;
 
 --
 -- Name: domain_name_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -778,7 +781,7 @@ CREATE SEQUENCE public.domainpolicy_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.domainpolicy_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.domainpolicy_id_seq OWNER TO kamailio;
 
 --
 -- Name: domainpolicy_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -816,7 +819,7 @@ CREATE SEQUENCE public.dr_gateways_gwid_seq
     CACHE 1;
 
 
-ALTER TABLE public.dr_gateways_gwid_seq OWNER TO kamailio;
+ALTER SEQUENCE public.dr_gateways_gwid_seq OWNER TO kamailio;
 
 --
 -- Name: dr_gateways_gwid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -852,7 +855,7 @@ CREATE SEQUENCE public.dr_groups_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.dr_groups_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.dr_groups_id_seq OWNER TO kamailio;
 
 --
 -- Name: dr_groups_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -886,7 +889,7 @@ CREATE SEQUENCE public.dr_gw_lists_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.dr_gw_lists_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.dr_gw_lists_id_seq OWNER TO kamailio;
 
 --
 -- Name: dr_gw_lists_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -925,7 +928,7 @@ CREATE SEQUENCE public.dr_rules_ruleid_seq
     CACHE 1;
 
 
-ALTER TABLE public.dr_rules_ruleid_seq OWNER TO kamailio;
+ALTER SEQUENCE public.dr_rules_ruleid_seq OWNER TO kamailio;
 
 --
 -- Name: dr_rules_ruleid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -971,7 +974,7 @@ CREATE SEQUENCE public.globalblacklist_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.globalblacklist_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.globalblacklist_id_seq OWNER TO kamailio;
 
 --
 -- Name: globalblacklist_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -1007,7 +1010,7 @@ CREATE SEQUENCE public.grp_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.grp_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.grp_id_seq OWNER TO kamailio;
 
 --
 -- Name: grp_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -1022,10 +1025,10 @@ ALTER SEQUENCE public.grp_id_seq OWNED BY public.grp.id;
 
 CREATE TABLE public.htable (
     id integer NOT NULL,
-    key_name character varying(64) DEFAULT ''::character varying NOT NULL,
+    key_name character varying(256) DEFAULT ''::character varying NOT NULL,
     key_type integer DEFAULT 0 NOT NULL,
     value_type integer DEFAULT 0 NOT NULL,
-    key_value character varying(128) DEFAULT ''::character varying NOT NULL,
+    key_value character varying(512) DEFAULT ''::character varying NOT NULL,
     expires integer DEFAULT 0 NOT NULL
 );
 
@@ -1044,7 +1047,7 @@ CREATE SEQUENCE public.htable_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.htable_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.htable_id_seq OWNER TO kamailio;
 
 --
 -- Name: htable_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -1080,7 +1083,7 @@ CREATE SEQUENCE public.imc_members_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.imc_members_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.imc_members_id_seq OWNER TO kamailio;
 
 --
 -- Name: imc_members_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -1115,7 +1118,7 @@ CREATE SEQUENCE public.imc_rooms_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.imc_rooms_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.imc_rooms_id_seq OWNER TO kamailio;
 
 --
 -- Name: imc_rooms_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -1160,7 +1163,7 @@ CREATE SEQUENCE public.lcr_gw_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.lcr_gw_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.lcr_gw_id_seq OWNER TO kamailio;
 
 --
 -- Name: lcr_gw_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -1199,7 +1202,7 @@ CREATE SEQUENCE public.lcr_rule_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.lcr_rule_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.lcr_rule_id_seq OWNER TO kamailio;
 
 --
 -- Name: lcr_rule_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -1236,7 +1239,7 @@ CREATE SEQUENCE public.lcr_rule_target_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.lcr_rule_target_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.lcr_rule_target_id_seq OWNER TO kamailio;
 
 --
 -- Name: lcr_rule_target_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -1308,7 +1311,7 @@ CREATE SEQUENCE public.location_attrs_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.location_attrs_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.location_attrs_id_seq OWNER TO kamailio;
 
 --
 -- Name: location_attrs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -1329,7 +1332,7 @@ CREATE SEQUENCE public.location_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.location_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.location_id_seq OWNER TO kamailio;
 
 --
 -- Name: location_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -1381,7 +1384,7 @@ CREATE SEQUENCE public.missed_calls_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.missed_calls_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.missed_calls_id_seq OWNER TO kamailio;
 
 --
 -- Name: missed_calls_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -1419,7 +1422,7 @@ CREATE SEQUENCE public.mohqcalls_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.mohqcalls_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.mohqcalls_id_seq OWNER TO kamailio;
 
 --
 -- Name: mohqcalls_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -1456,7 +1459,7 @@ CREATE SEQUENCE public.mohqueues_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.mohqueues_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.mohqueues_id_seq OWNER TO kamailio;
 
 --
 -- Name: mohqueues_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -1490,7 +1493,7 @@ CREATE SEQUENCE public.mtree_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.mtree_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.mtree_id_seq OWNER TO kamailio;
 
 --
 -- Name: mtree_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -1525,7 +1528,7 @@ CREATE SEQUENCE public.mtrees_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.mtrees_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.mtrees_id_seq OWNER TO kamailio;
 
 --
 -- Name: mtrees_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -1560,7 +1563,7 @@ CREATE SEQUENCE public.pdt_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.pdt_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.pdt_id_seq OWNER TO kamailio;
 
 --
 -- Name: pdt_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -1595,7 +1598,7 @@ CREATE SEQUENCE public.pl_pipes_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.pl_pipes_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.pl_pipes_id_seq OWNER TO kamailio;
 
 --
 -- Name: pl_pipes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -1630,28 +1633,27 @@ ALTER TABLE public.presentity OWNER TO kamailio;
 --
 
 CREATE VIEW public.presentities AS
- SELECT presentity.id,
-    ((('sip:'::text || (presentity.username)::text) || '@'::text) || (presentity.domain)::text) AS presentity_uri,
-    presentity.username,
-    presentity.domain,
-    presentity.event,
-    "substring"((presentity.etag)::text, 1, ("position"((presentity.etag)::text, '@'::text) - 1)) AS callid,
-    to_timestamp((presentity.received_time)::double precision) AS received,
-    to_timestamp((presentity.expires)::double precision) AS expire_date,
-    presentity.expires,
-    (presentity.sender)::character varying(30) AS sender,
-            WHEN ((presentity.event)::text = 'dialog'::text) THEN "substring"(encode(presentity.body, 'escape'::text), ("position"(presentity.body, '\x3c73746174653e'::bytea) + 7), (("position"(presentity.body, '\x3c2f73746174653e'::bytea) - "position"(presentity.body, '\x3c73746174653e'::bytea)) - 7))
+ SELECT id,
+    ((('sip:'::text || (username)::text) || '@'::text) || (domain)::text) AS presentity_uri,
+    username,
+    domain,
+    event,
+    "substring"((etag)::text, 1, ("position"((etag)::text, '@'::text) - 1)) AS callid,
+    to_timestamp((received_time)::double precision) AS received,
+    to_timestamp((expires)::double precision) AS expire_date,
+    expires,
+    (sender)::character varying(30) AS sender,
     lower(((
         CASE
-            WHEN ((presentity.event)::text = 'presence'::text) THEN
+            WHEN ((event)::text = 'dialog'::text) THEN "substring"(encode(body, 'escape'::text), ("position"(body, '\x3c73746174653e'::bytea) + 7), (("position"(body, '\x3c2f73746174653e'::bytea) - "position"(body, '\x3c73746174653e'::bytea)) - 7))
+            WHEN ((event)::text = 'presence'::text) THEN
             CASE
-);
-                WHEN ("position"(encode(presentity.body, 'escape'::text), '<dm:note>'::text) = 0) THEN replace("substring"(encode(presentity.body, 'escape'::text), ("position"(encode(presentity.body, 'escape'::text), '<note>'::text) + 6), (("position"(encode(presentity.body, 'escape'::text), '</note>'::text) - "position"(encode(presentity.body, 'escape'::text), '<note>'::text)) - 6)), ' '::text, ''::text)
-                ELSE replace("substring"(encode(presentity.body, 'escape'::text), ("position"(encode(presentity.body, 'escape'::text), '<dm:note>'::text) + 9), (("position"(encode(presentity.body, 'escape'::text), '</dm:note>'::text) - "position"(encode(presentity.body, 'escape'::text), '<dm:note>'::text)) - 9)), ' '::text, ''::text)
+                WHEN ("position"(encode(body, 'escape'::text), '<dm:note>'::text) = 0) THEN replace("substring"(encode(body, 'escape'::text), ("position"(encode(body, 'escape'::text), '<note>'::text) + 6), (("position"(encode(body, 'escape'::text), '</note>'::text) - "position"(encode(body, 'escape'::text), '<note>'::text)) - 6)), ' '::text, ''::text)
+                ELSE replace("substring"(encode(body, 'escape'::text), ("position"(encode(body, 'escape'::text), '<dm:note>'::text) + 9), (("position"(encode(body, 'escape'::text), '</dm:note>'::text) - "position"(encode(body, 'escape'::text), '<dm:note>'::text)) - 9)), ' '::text, ''::text)
             END
-            WHEN ((presentity.event)::text = 'message-summary'::text) THEN
+            WHEN ((event)::text = 'message-summary'::text) THEN
             CASE
-                WHEN ("position"(encode(presentity.body, 'escape'::text), 'Messages-Waiting: yes'::text) = 0) THEN 'Waiting'::text
+                WHEN ("position"(encode(body, 'escape'::text), 'Messages-Waiting: yes'::text) = 0) THEN 'Waiting'::text
                 ELSE 'Not-Waiting'::text
             END
             ELSE NULL::text
@@ -1659,7 +1661,7 @@ CREATE VIEW public.presentities AS
    FROM public.presentity;
 
 
-ALTER TABLE public.presentities OWNER TO kamailio;
+ALTER VIEW public.presentities OWNER TO kamailio;
 
 --
 -- Name: presentity_id_seq; Type: SEQUENCE; Schema: public; Owner: kamailio
@@ -1673,7 +1675,7 @@ CREATE SEQUENCE public.presentity_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.presentity_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.presentity_id_seq OWNER TO kamailio;
 
 --
 -- Name: presentity_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -1723,7 +1725,7 @@ CREATE SEQUENCE public.pua_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.pua_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.pua_id_seq OWNER TO kamailio;
 
 --
 -- Name: pua_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -1759,7 +1761,7 @@ CREATE SEQUENCE public.purplemap_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.purplemap_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.purplemap_id_seq OWNER TO kamailio;
 
 --
 -- Name: purplemap_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -1793,7 +1795,7 @@ CREATE SEQUENCE public.re_grp_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.re_grp_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.re_grp_id_seq OWNER TO kamailio;
 
 --
 -- Name: re_grp_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -1833,7 +1835,7 @@ CREATE SEQUENCE public.rls_presentity_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.rls_presentity_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.rls_presentity_id_seq OWNER TO kamailio;
 
 --
 -- Name: rls_presentity_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -1888,7 +1890,7 @@ CREATE SEQUENCE public.rls_watchers_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.rls_watchers_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.rls_watchers_id_seq OWNER TO kamailio;
 
 --
 -- Name: rls_watchers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -1925,7 +1927,7 @@ CREATE SEQUENCE public.rtpengine_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.rtpengine_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.rtpengine_id_seq OWNER TO kamailio;
 
 --
 -- Name: rtpengine_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -1962,7 +1964,7 @@ CREATE SEQUENCE public.rtpproxy_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.rtpproxy_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.rtpproxy_id_seq OWNER TO kamailio;
 
 --
 -- Name: rtpproxy_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -2007,7 +2009,7 @@ CREATE SEQUENCE public.sca_subscriptions_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.sca_subscriptions_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.sca_subscriptions_id_seq OWNER TO kamailio;
 
 --
 -- Name: sca_subscriptions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -2051,7 +2053,7 @@ CREATE SEQUENCE public.silo_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.silo_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.silo_id_seq OWNER TO kamailio;
 
 --
 -- Name: silo_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -2095,7 +2097,7 @@ CREATE SEQUENCE public.sip_trace_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.sip_trace_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.sip_trace_id_seq OWNER TO kamailio;
 
 --
 -- Name: sip_trace_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -2135,7 +2137,7 @@ CREATE SEQUENCE public.speed_dial_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.speed_dial_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.speed_dial_id_seq OWNER TO kamailio;
 
 --
 -- Name: speed_dial_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -2172,7 +2174,7 @@ CREATE SEQUENCE public.subscriber_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.subscriber_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.subscriber_id_seq OWNER TO kamailio;
 
 --
 -- Name: subscriber_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -2240,7 +2242,7 @@ CREATE SEQUENCE public.topos_d_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.topos_d_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.topos_d_id_seq OWNER TO kamailio;
 
 --
 -- Name: topos_d_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -2296,7 +2298,7 @@ CREATE SEQUENCE public.topos_t_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.topos_t_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.topos_t_id_seq OWNER TO kamailio;
 
 --
 -- Name: topos_t_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -2334,7 +2336,7 @@ CREATE SEQUENCE public.trusted_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.trusted_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.trusted_id_seq OWNER TO kamailio;
 
 --
 -- Name: trusted_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -2362,7 +2364,7 @@ CREATE TABLE public.uacreg (
     expires integer DEFAULT 0 NOT NULL,
     flags integer DEFAULT 0 NOT NULL,
     reg_delay integer DEFAULT 0 NOT NULL
-
+);
 
 
 ALTER TABLE public.uacreg OWNER TO kamailio;
@@ -2379,7 +2381,7 @@ CREATE SEQUENCE public.uacreg_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.uacreg_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.uacreg_id_seq OWNER TO kamailio;
 
 --
 -- Name: uacreg_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -2419,7 +2421,7 @@ CREATE SEQUENCE public.uid_credentials_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.uid_credentials_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.uid_credentials_id_seq OWNER TO kamailio;
 
 --
 -- Name: uid_credentials_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -2470,7 +2472,7 @@ CREATE SEQUENCE public.uid_domain_attrs_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.uid_domain_attrs_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.uid_domain_attrs_id_seq OWNER TO kamailio;
 
 --
 -- Name: uid_domain_attrs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -2491,7 +2493,7 @@ CREATE SEQUENCE public.uid_domain_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.uid_domain_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.uid_domain_id_seq OWNER TO kamailio;
 
 --
 -- Name: uid_domain_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -2527,7 +2529,7 @@ CREATE SEQUENCE public.uid_global_attrs_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.uid_global_attrs_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.uid_global_attrs_id_seq OWNER TO kamailio;
 
 --
 -- Name: uid_global_attrs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -2582,7 +2584,7 @@ CREATE SEQUENCE public.uid_uri_attrs_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.uid_uri_attrs_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.uid_uri_attrs_id_seq OWNER TO kamailio;
 
 --
 -- Name: uid_uri_attrs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -2603,7 +2605,7 @@ CREATE SEQUENCE public.uid_uri_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.uid_uri_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.uid_uri_id_seq OWNER TO kamailio;
 
 --
 -- Name: uid_uri_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -2640,7 +2642,7 @@ CREATE SEQUENCE public.uid_user_attrs_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.uid_user_attrs_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.uid_user_attrs_id_seq OWNER TO kamailio;
 
 --
 -- Name: uid_user_attrs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -2675,8 +2677,8 @@ CREATE SEQUENCE public.uri_id_seq
     NO MAXVALUE
     CACHE 1;
 
---
-ALTER TABLE public.uri_id_seq OWNER TO kamailio;
+
+ALTER SEQUENCE public.uri_id_seq OWNER TO kamailio;
 
 --
 -- Name: uri_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -2712,7 +2714,7 @@ CREATE SEQUENCE public.userblacklist_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.userblacklist_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.userblacklist_id_seq OWNER TO kamailio;
 
 --
 -- Name: userblacklist_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -2751,7 +2753,7 @@ CREATE SEQUENCE public.usr_preferences_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.usr_preferences_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.usr_preferences_id_seq OWNER TO kamailio;
 
 --
 -- Name: usr_preferences_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -2802,7 +2804,7 @@ CREATE SEQUENCE public.watchers_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.watchers_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.watchers_id_seq OWNER TO kamailio;
 
 --
 -- Name: watchers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
@@ -2842,20 +2844,13 @@ CREATE SEQUENCE public.xcap_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.xcap_id_seq OWNER TO kamailio;
+ALTER SEQUENCE public.xcap_id_seq OWNER TO kamailio;
 
 --
 -- Name: xcap_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kamailio
 --
 
 ALTER SEQUENCE public.xcap_id_seq OWNED BY public.xcap.id;
-
-
---
--- Name: acc id; Type: DEFAULT; Schema: public; Owner: kamailio
---
-
-ALTER TABLE ONLY public.acc ALTER COLUMN id SET DEFAULT nextval('public.acc_id_seq'::regclass);
 
 
 --
@@ -3292,7 +3287,7 @@ ALTER TABLE ONLY public.uid_uri ALTER COLUMN id SET DEFAULT nextval('public.uid_
 ALTER TABLE ONLY public.uid_uri_attrs ALTER COLUMN id SET DEFAULT nextval('public.uid_uri_attrs_id_seq'::regclass);
 
 
--- Data for Name: imc_rooms; Type: TABLE DATA; Schema: public; Owner: kamailio
+--
 -- Name: uid_user_attrs id; Type: DEFAULT; Schema: public; Owner: kamailio
 --
 
@@ -3562,7 +3557,7 @@ COPY public.imc_members (id, username, domain, room, flag) FROM stdin;
 
 
 --
---
+-- Data for Name: imc_rooms; Type: TABLE DATA; Schema: public; Owner: kamailio
 --
 
 COPY public.imc_rooms (id, name, domain, flag) FROM stdin;
@@ -3598,6 +3593,14 @@ COPY public.lcr_rule_target (id, lcr_id, rule_id, gw_id, priority, weight) FROM 
 --
 
 COPY public.location (id, ruid, username, domain, contact, received, path, expires, q, callid, cseq, last_modified, flags, cflags, user_agent, socket, methods, instance, reg_id, server_id, connection_id, keepalive, partition) FROM stdin;
+\.
+
+
+--
+-- Data for Name: location_attrs; Type: TABLE DATA; Schema: public; Owner: kamailio
+--
+
+COPY public.location_attrs (id, ruid, username, domain, aname, atype, avalue, last_modified) FROM stdin;
 \.
 
 
@@ -3753,7 +3756,7 @@ COPY public.sip_trace (id, time_stamp, time_us, callid, traced_user, msg, method
 \.
 
 
--- Name: address_id_seq; Type: SEQUENCE SET; Schema: public; Owner: kamailio
+--
 -- Data for Name: speed_dial; Type: TABLE DATA; Schema: public; Owner: kamailio
 --
 
@@ -3894,77 +3897,77 @@ COPY public.usr_preferences (id, uuid, username, domain, attribute, type, value,
 --
 
 COPY public.version (table_name, table_version) FROM stdin;
-version 1
-acc     5
-acc_cdrs        2
-missed_calls    4
-dbaliases       1
-subscriber      7
-usr_preferences 2
-carrierroute    3
-carrierfailureroute     2
-carrier_name    1
-domain_name     1
-cpl     1
-dialog  7
-dialog_vars     1
-dialplan        2
-dispatcher      4
-domain  2
-domain_attrs    1
-domainpolicy    2
-dr_gateways     3
-dr_rules        3
-dr_gw_lists     1
-dr_groups       2
-grp     2
-re_grp  1
-htable  2
-imc_rooms       1
-imc_members     1
-lcr_gw  3
-lcr_rule_target 1
-lcr_rule        3
-matrix  1
-mohqcalls       1
-mohqueues       1
-silo    8
-mtree   1
-mtrees  2
-pdt     1
-trusted 6
-address 6
-pl_pipes        1
-presentity      5
-active_watchers 12
-watchers        3
-xcap    4
-pua     7
-purplemap       1
-aliases 8
-rls_presentity  1
-rls_watchers    3
-rtpengine       1
-rtpproxy        1
-sca_subscriptions       2
-sip_trace       4
-speed_dial      2
-topos_d 1
-topos_t 1
-uacreg  3
-uid_credentials 7
-uid_user_attrs  3
-uid_domain      2
-uid_domain_attrs        1
-uid_global_attrs        1
-uid_uri 3
-uid_uri_attrs   2
-uri     1
-userblacklist   1
-globalblacklist 1
-location        9
-location_attrs  1
-event_list      1
+version	1
+acc	5
+acc_cdrs	2
+missed_calls	4
+dbaliases	1
+subscriber	7
+usr_preferences	2
+carrierroute	3
+carrierfailureroute	2
+carrier_name	1
+domain_name	1
+cpl	1
+dialog	7
+dialog_vars	1
+dialplan	2
+dispatcher	4
+domain	2
+domain_attrs	1
+domainpolicy	2
+dr_gateways	3
+dr_rules	3
+dr_gw_lists	1
+dr_groups	2
+grp	2
+re_grp	1
+htable	2
+imc_rooms	1
+imc_members	1
+lcr_gw	3
+lcr_rule_target	1
+lcr_rule	3
+matrix	1
+mohqcalls	1
+mohqueues	1
+silo	8
+mtree	1
+mtrees	2
+pdt	1
+trusted	6
+address	6
+pl_pipes	1
+presentity	5
+active_watchers	12
+watchers	3
+xcap	4
+pua	7
+purplemap	1
+aliases	8
+rls_presentity	1
+rls_watchers	3
+rtpengine	1
+rtpproxy	1
+sca_subscriptions	2
+sip_trace	4
+speed_dial	2
+topos_d	1
+topos_t	1
+uacreg	3
+uid_credentials	7
+uid_user_attrs	3
+uid_domain	2
+uid_domain_attrs	1
+uid_global_attrs	1
+uid_uri	3
+uid_uri_attrs	2
+uri	1
+userblacklist	1
+globalblacklist	1
+location	9
+location_attrs	1
+event_list	1
 \.
 
 
@@ -4002,17 +4005,18 @@ SELECT pg_catalog.setval('public.acc_id_seq', 1, false);
 -- Name: active_watchers_id_seq; Type: SEQUENCE SET; Schema: public; Owner: kamailio
 --
 
-SELECT pg_catalog.setval('public.active_watchers_id_seq', 2526, true);
+SELECT pg_catalog.setval('public.active_watchers_id_seq', 2589, true);
 
 
 --
 -- Name: active_watchers_log_id_seq; Type: SEQUENCE SET; Schema: public; Owner: kamailio
 --
 
-SELECT pg_catalog.setval('public.active_watchers_log_id_seq', 672642, true);
+SELECT pg_catalog.setval('public.active_watchers_log_id_seq', 672837, true);
 
 
 --
+-- Name: address_id_seq; Type: SEQUENCE SET; Schema: public; Owner: kamailio
 --
 
 SELECT pg_catalog.setval('public.address_id_seq', 1, false);
@@ -4085,7 +4089,7 @@ SELECT pg_catalog.setval('public.dialplan_id_seq', 1, false);
 -- Name: dispatcher_id_seq; Type: SEQUENCE SET; Schema: public; Owner: kamailio
 --
 
-SELECT pg_catalog.setval('public.dispatcher_id_seq', 6, true);
+SELECT pg_catalog.setval('public.dispatcher_id_seq', 8, true);
 
 
 --
@@ -4204,14 +4208,14 @@ SELECT pg_catalog.setval('public.lcr_rule_target_id_seq', 1, false);
 -- Name: location_attrs_id_seq; Type: SEQUENCE SET; Schema: public; Owner: kamailio
 --
 
-SELECT pg_catalog.setval('public.location_attrs_id_seq', 299672, true);
+SELECT pg_catalog.setval('public.location_attrs_id_seq', 299720, true);
 
 
 --
 -- Name: location_id_seq; Type: SEQUENCE SET; Schema: public; Owner: kamailio
 --
 
-SELECT pg_catalog.setval('public.location_id_seq', 332, true);
+SELECT pg_catalog.setval('public.location_id_seq', 348, true);
 
 
 --
@@ -4267,7 +4271,7 @@ SELECT pg_catalog.setval('public.pl_pipes_id_seq', 1, false);
 -- Name: presentity_id_seq; Type: SEQUENCE SET; Schema: public; Owner: kamailio
 --
 
-SELECT pg_catalog.setval('public.presentity_id_seq', 3284, true);
+SELECT pg_catalog.setval('public.presentity_id_seq', 3294, true);
 
 
 --
@@ -4472,14 +4476,6 @@ SELECT pg_catalog.setval('public.xcap_id_seq', 1, false);
 
 ALTER TABLE ONLY public.acc_cdrs
     ADD CONSTRAINT acc_cdrs_pkey PRIMARY KEY (id);
-
-
---
--- Name: acc acc_pkey; Type: CONSTRAINT; Schema: public; Owner: kamailio
---
-
-ALTER TABLE ONLY public.acc
-    ADD CONSTRAINT acc_pkey PRIMARY KEY (id);
 
 
 --
@@ -5320,13 +5316,6 @@ ALTER TABLE ONLY public.xcap
 
 ALTER TABLE ONLY public.xcap
     ADD CONSTRAINT xcap_pkey PRIMARY KEY (id);
-
-
---
--- Name: acc_callid_idx; Type: INDEX; Schema: public; Owner: kamailio
---
-
-CREATE INDEX acc_callid_idx ON public.acc USING btree (callid);
 
 
 --
